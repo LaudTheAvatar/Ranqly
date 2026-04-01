@@ -22,7 +22,9 @@ async function main(): Promise<void> {
   const { createApiApp } = await import("./backend/src/createApiApp");
 
   const dev = process.env.NODE_ENV !== "production";
-  const hostname = process.env.HOSTNAME ?? "0.0.0.0";
+  // Never use HOSTNAME for bind — Linux/PaaS set it to the container hostname and
+  // the proxy cannot reach the process (502 / gateway timeout).
+  const listenHost = process.env.LISTEN_HOST?.trim() || "0.0.0.0";
   const port = Number(process.env.PORT ?? 3000);
 
   const nextApp = next({ dev, dir: process.cwd() });
@@ -45,9 +47,9 @@ async function main(): Promise<void> {
       res.statusCode = 500;
       res.end("internal server error");
     }
-  }).listen(port, hostname, () => {
+  }).listen(port, listenHost, () => {
     console.log(
-      `Ranqly ready at http://${hostname === "0.0.0.0" ? "localhost" : hostname}:${port} (Next.js + API)`
+      `Ranqly ready at http://${listenHost === "0.0.0.0" ? "localhost" : listenHost}:${port} (Next.js + API)`
     );
   });
 }

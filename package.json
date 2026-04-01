@@ -6,6 +6,7 @@
     "node": ">=20.9.0"
   },
   "scripts": {
+    "postinstall": "npm ci --prefix backend --no-audit --no-fund || npm install --no-audit --no-fund --prefix backend",
     "prebuild": "node scripts/verify-next-tsconfig.cjs",
     "dev": "tsx server.ts",
     "dev:backend": "cd backend && npm run dev",

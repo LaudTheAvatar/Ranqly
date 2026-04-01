@@ -3,8 +3,8 @@
 
 generator client {
   provider      = "prisma-client-js"
-  // Render (and most Ubuntu 22.04+ hosts) use OpenSSL 3.x; without this, Prisma may warn and mis-detect libssl.
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  // Multiple Linux OpenSSL variants for PaaS (Render: glibc; Alpine Docker: musl).
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x", "rhel-openssl-3.0.x", "rhel-openssl-1.1.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
